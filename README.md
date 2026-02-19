@@ -1,260 +1,231 @@
 
 # Python Deep-Context
 
-**Graph-aware context extraction for LLM-assisted coding.**  
-Stop sending entire files. Send only what matters.
+**Send your LLM only what matters. Not entire files.**
 
-[![Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/DeepContextLabs.python-deep-context)](https://marketplace.visualstudio.com/items?itemName=DeepContextLabs.python-deep-context)
-[![Installs](https://img.shields.io/visual-studio-marketplace/i/DeepContextLabs.python-deep-context)](https://marketplace.visualstudio.com/items?itemName=DeepContextLabs.python-deep-context)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/DeepContextLabs.python-deep-context)](https://marketplace.visualstudio.com/items?itemName=DeepContextLabs.python-deep-context)
+Connectivity-aware context extraction for serious Python workflows.
+
+![Version](https://img.shields.io/visual-studio-marketplace/v/DeepContextLabs.python-deep-context)  
+![Installs](https://img.shields.io/visual-studio-marketplace/i/DeepContextLabs.python-deep-context)  
+![Rating](https://img.shields.io/visual-studio-marketplace/r/DeepContextLabs.python-deep-context)  
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Python Deep-Context runs a **local Sidecar Engine** and builds a precise dependency slice around your current symbol using a **Hybrid AST + LSP pipeline** — producing a **token-budgeted, high-density report** for modern LLM workflows (Smart RAG, Context Window optimization, refactoring, agentic coding).
+---
 
-🔒 **Security-first / Offline**: analysis runs **100% locally**. **No network required.** Your code never leaves your machine.  
-📦 **Bundled engine**: the Sidecar Engine ships as a **standalone binary** — no `pip install` needed.  
-✅ **Always-returns**: fast when possible, correct when needed, never empty.
+## What this extension does
 
-⚡️ **Best companion for:** ChatGPT (Web), Claude.ai, GitHub Copilot Chat, Cursor, Continue, or any custom Agent.
+Python Deep-Context builds a **precise, token-budgeted context report** around the symbol you're working on.
 
-![Hero](media/hero.png)
+Instead of pasting entire files into ChatGPT or Copilot, you get:
+
+- exact dependencies  
+- real call-site evidence  
+- behavior signals  
+- minimal token footprint  
+
+It runs a **local Sidecar Engine** that performs hybrid static + LSP analysis and outputs a clean Markdown artifact ready for any LLM.
+
+No cloud.  
+No indexing server.  
+No config.
+
+---
+
+## Why developers install this
+
+Most LLM failures come from context problems:
+
+| Problem | Result |
+|--------|-------|
+Too much code | token waste, hallucinations |
+Too little code | wrong assumptions |
+Missing call context | broken refactors |
+Hidden side-effects | unsafe edits |
+
+Deep-Context fixes this by generating a **high-signal connectivity slice** around your current symbol.
+
+The LLM receives only what it needs to reason correctly.
 
 ---
 
 ## Demo
 
-Short, focused animation showing the end-to-end flow:
-
-![Demo](media/demo.gif)
+![Demo](https://github.com/hgliyuhao/python-deep-context/raw/HEAD/media/demo.gif)
 
 ---
 
-## Why
+## Core benefits
 
-LLMs fail when context is:
+### High-signal context
+Only the definitions and call-paths that matter.
 
-- **too large** → token waste + noise
-- **too small** → missing dependencies + wrong assumptions
+### Fully local
+Runs entirely on your machine.  
+Your code never leaves VS Code.
 
-Deep-Context solves the “Lost in Context” problem by generating a **high-density, token-budgeted report** around the *current symbol* — with cross-file linking and graceful fallback.
+### Zero setup
+Engine is bundled.  
+Works out-of-the-box.
 
----
+### Fast
+AST fast-path first.  
+LSP when needed.  
+Text fallback if required.
 
-## Key Features
-
-- **Smart RAG Slice (Context Window–Optimized)**: Generates a dependency slice for the “symbol at cursor” (function / method / class), optimized for limited Context Windows.
-- **Hybrid resolution**: AST fast path + LSP precision + textual fallback
-- **Token budgeting**: strict output budget with adaptive degradation
-- **Dependency DNA**: resolves library aliases + version fingerprints (lockfiles + runtime)
-- **Structural analysis**: highlights I/O, external calls, mutations, and sinks
-- **Preview + Copy Markdown**: one-click export for ChatGPT / Claude / Gemini / agents
-
----
-
-## Quick Start
-
-### 1) Start the Sidecar Engine
-
-Command Palette:
-
-- `Deep-Context: Start Engine`
-
-### 2) Generate a report
-
-Right click in editor:
-
-- `Deep-Context: Generate Report (Here)`
-- `Deep-Context: Generate Report (Selection)`
-
-### 3) Open report preview
-
-- `Deep-Context: Open Report Preview`
-
-### 4) Use with an LLM (Copy → Paste)
-
-In the report preview:
-
-- Run `Deep-Context: Copy Last Report Markdown`
-- Paste into **ChatGPT / Claude / Gemini** or your agent prompt
-
-**Result:** the model receives the exact local definitions + dependencies needed to solve your task with fewer hallucinations and less token waste.
-
-> Deep-Context generates the *context artifact*; your LLM is the reasoning layer.
+### Works with any LLM
+ChatGPT  
+Claude  
+Copilot Chat  
+Cursor  
+Continue  
+Custom agents
 
 ---
 
-## Output Examples
+## Quick start
 
-### Overview
-![Overview](media/overview.png)
+### 1. Start engine
+Open Command Palette:
 
-### Focused Source Context
-![Focused](media/focused.png)
+```
 
-### Full Report
-![Report](media/report.png)
+Deep-Context: Start Engine
 
----
-
-## 📦 Installation
-
-Install directly from the **VS Code Marketplace**.
-
-**Zero pip installs:** the Sidecar Engine is bundled as a **standalone binary** — no `pip install` required.  
-**Requires:** Microsoft Python extension (`ms-python.python`) to be active (for language intelligence / LSP integration).
-
-🔒 **Security First (Offline):** Your code never leaves your machine during analysis. The Sidecar Engine runs **100% locally / offline**.
+```
 
 ---
 
-## ⚙️ Configuration
+### 2. Generate report
+Right-click inside Python file:
 
-Settings are defined under the **`pythonDeepContext.*`** prefix.
+```
 
-| Setting | Default | Description |
-| :--- | :--- | :--- |
-| `pythonDeepContext.focusMaxLines` | `500` | Max lines to include in the focused source block. |
-| `pythonDeepContext.tokenModel` | `"gpt-5.2"` | Tokenizer model used for budgeting (affects truncation). |
-| `pythonDeepContext.verbosity` | `"compact"` | Output detail. Use `"debug"` for full dependency graphs. |
-| `pythonDeepContext.treeMaxNodes` | `150` | Max nodes displayed in the project structure tree. |
-| `pythonDeepContext.scanDepth` | `2` | Max depth for project structure scan. |
+Deep-Context: Generate Report (Here)
+Deep-Context: Generate Report (Selection)
 
-> Note: Settings keys must match the extension’s `contributes.configuration` entries in `package.json`.  
-> If a setting is not yet implemented in your extension, remove it from the table until it exists.
+```
 
 ---
 
-## Technology Inside (Technical Highlights)
+### 3. Send to LLM
+```
 
-Deep-Context is not “autocomplete glue” — it’s a multi-layer analysis engine designed for serious LLM workflows:
-**RAG builders, agent engineers, refactoring tooling, prompt engineers, and high-signal code review pipelines.**
+Deep-Context: Copy Last Report Markdown
 
-| Layer | Component | Function |
-|------:|-----------|----------|
-| L1 | AST Fast Path | Uses CPython `ast` & LibCST for ms-level scope locating and structural slicing. |
-| L2 | Hybrid Linker | Combines LSP resolution (Definition/TypeDefinition/Hover) with ripgrep-style textual verification for precise symbol linking. |
-| L3 | Dependency DNA | Scans lockfiles (uv/poetry/pipenv) and probes runtime environments to resolve library versions & aliases. |
-| L4 | Structure Analyzer | Detects I/O side effects, control flow skeletons, and variable mutations to model behavior (not just text). |
-| L5 | Token Allocator | Uses `tiktoken` to strictly budget output for LLM context windows and adaptive degradation. |
+````
+
+Paste into your chat tool.
+
+You now get **correct answers with far fewer tokens**.
 
 ---
 
-## How It Works
+## What makes it different
 
-### 1) Hybrid Analysis Architecture
+### Connectivity-aware slicing
+Resolves local helper functions, types, and callers  
+(1-hop dependency closure)
 
-A layered strategy that balances **speed**, **accuracy**, and **always-returns** resilience:
+### Hybrid analysis
+AST + LSP + textual verification  
+Fast when possible, precise when needed.
 
-- **Layer A — AST Fast Path**  
-  Millisecond-level symbol scanning, import binding, scope locating.
-- **Layer B — LSP Dynamic Resolution**  
-  Uses VS Code language intelligence (Definition / TypeDefinition / Hover) for cross-file precision.
-- **Layer C — Textual Fallback**  
-  When LSP is slow/unavailable, degrades to high-performance textual search + regex verification.
+### Token budgeting
+Output size is strictly controlled.  
+Core logic preserved. Noise collapsed.
 
-**Result:** fast when possible, correct when needed, never empty.
+### Behavior signals
+Highlights:
+- I/O
+- mutations
+- network calls
+- external APIs
 
-### 2) Dependency DNA Fingerprinting
-
-Solves the classic LLM problem: *hallucinated libraries / wrong versions*.
-
-- Parses `requirements.txt`, `pyproject.toml`, lockfiles (uv/poetry/pipenv)
-- Runtime probing against the actual interpreter environment
-- Alias mapping (e.g., `PIL → Pillow`, `cv2 → opencv-python`)
-
-### 3) Smart Focus Context (Token-Dense)
-
-Not “copy a file” — but **AST-aware slicing**:
-
-- Extracts full function/class definitions (structural, not line-based)
-- Collapses noise (large literals, config blobs) while preserving logic skeleton
-- One-hop inlining for local helper functions to close the reasoning loop
-
-### 4) Structural Side-Effect Analysis
-
-Helps an LLM understand **behavior**:
-
-- Detects I/O side effects (DB/cache/network/vector DB/LLM calls)
-- Captures control-flow skeletons (`if/else`, `try/except`)
-- Tracks writes/mutations and important sinks
-
-### 5) Token Budgeting & Adaptive Orchestration
-
-Purpose-built for limited context windows:
-
-- Built-in token counting (`tiktoken`)
-- Parallel orchestration of AST/LSP/deps scans
-- Priority-based degradation: drop low-value text first, keep core definitions/edges
+LLMs reason better when behavior is visible.
 
 ---
 
-## Commands
+## Who this is for
 
-| Command | Description |
-|--------|-------------|
-| Deep-Context: Start Engine | Launch Sidecar Engine |
-| Deep-Context: Stop Engine | Stop Sidecar Engine |
-| Deep-Context: Generate Report (Here) | Analyze symbol at cursor |
-| Deep-Context: Generate Report (Selection) | Analyze current selection |
-| Deep-Context: Re-run Last Target | Repeat last analysis |
-| Deep-Context: Open Report Preview | Open the report document |
-| Deep-Context: Copy Last Report Markdown | Copy report to clipboard |
+Python engineers using:
+
+- ChatGPT for refactoring
+- Copilot Chat
+- Claude
+- Cursor / Continue
+- custom coding agents
+- large codebases
+- monorepos
+
+If you paste code into LLMs daily, this saves time and tokens.
+
+---
+
+## Requirements
+
+- VS Code Python extension (`ms-python.python`)
+- Python workspace
+
+Nothing else.
+
+No pip installs required.
 
 ---
 
 ## Troubleshooting
 
-- **Report is empty or missing cross-file links**  
-  Ensure the Python extension is active and language server indexing has completed.
+**Empty report**  
+Wait for Python extension indexing to finish.
 
-- **LSP is slow / unavailable**  
-  Deep-Context will automatically degrade to textual fallback (ripgrep + verification). Output remains non-empty.
+**Missing cross-file links**  
+Ensure correct interpreter is selected.
 
-- **Ripgrep not found (`rg`)**  
-  The engine relies on **ripgrep (`rg`)** for high-speed textual fallback.  
-  Most VS Code environments include it, but some Windows setups may not.  
-  If you see `"Ripgrep executable not found"`, install ripgrep and ensure `rg` is available in your `PATH`.
-
-- **Monorepo / multiple interpreters**  
-  Verify the selected Python interpreter matches the workspace environment for best Dependency DNA accuracy.
+**Ripgrep error (Windows)**  
+Ensure `rg` exists in PATH.
 
 ---
 
-## 🔌 For Agent Developers (Protocol)
+## Architecture (short version)
 
-<details>
-<summary>Click to view JSON Output Schema</summary>
+Layered pipeline:
 
-Deep-Context outputs a **machine-readable JSON header** plus a **human-readable Markdown body**.
+1. AST fast path  
+2. LSP symbol linking  
+3. dependency environment scan  
+4. side-effect detection  
+5. token allocator  
 
-This enables:
-- deterministic parsing by tools/agents
-- stable section ordering
-- measurable performance stats
-- future protocol integrations
+All local.  
+No cloud indexing.
 
-Minimal example (illustrative):
+---
+
+## For agent developers
+
+Deep-Context outputs:
+
+- machine-readable JSON header  
+- Markdown body  
+
+This allows automated pipelines and tools to consume context programmatically.
 
 ```json
 {
   "v": 2,
-  "mode": "json_head_markdown_body",
-  "target": { "file": "src/apis/chat.py", "line": 111, "col": 52 },
-  "scope": { "symbol": "on_message", "type": "Method" },
-  "sections": ["deps_used", "callers", "focused_source_context", "hybrid_linking", "project_structure", "performance"]
+  "target": { "file": "api.py", "line": 42 },
+  "sections": ["deps_used", "callers", "source"]
 }
 ````
-
-</details>
 
 ---
 
 ## Roadmap
 
-* Multi-file graph view
-* Token budgeting presets (GPT / Claude / Gemini)
-* Inline diff / patch suggestions
-* Agent protocol integration
+* connectivity graph view
+* patch/diff hints
+* MCP integration
+* token presets for major LLMs
+* multi-file context mode
 
 ---
 
@@ -262,5 +233,13 @@ Minimal example (illustrative):
 
 MIT
 
+---
+
+## Links
+
+[Report Bug](https://github.com/hgliyuhao/python-deep-context/issues)
+[Request Feature](https://github.com/hgliyuhao/python-deep-context/issues)
+
+
 ```
-# python-deep-context
+
